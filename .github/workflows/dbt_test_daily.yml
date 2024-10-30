@@ -34,7 +34,12 @@ jobs:
         with:
           python-version: "3.10"
           cache: "pip"
-
+          
+      - name: install dependencies
+        run: |
+          pip install -r requirements.txt
+          dbt deps
+        
       - name: Build Daily Testing Views
         run: |
           dbt run -m "fsc_evm,tag:daily_test"
