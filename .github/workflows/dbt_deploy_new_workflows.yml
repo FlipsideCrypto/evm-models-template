@@ -1,11 +1,11 @@
-name: dbt_test_daily 
-run-name: dbt_test_daily
+name: dbt_deploy_new_workflows
+run-name: dbt_deploy_new_workflows
 
 on:
   workflow_dispatch:
     branches:
       - "main"
-    
+
 env:
   DBT_PROFILES_DIR: ./
 
@@ -34,16 +34,12 @@ jobs:
         with:
           python-version: "3.10"
           cache: "pip"
-          
+
       - name: install dependencies
         run: |
           pip install -r requirements.txt
           dbt deps
-        
-      - name: Build Daily Testing Views
+          
+      - name: Deploy New Github Actions
         run: |
-          dbt run -m "fsc_evm,tag:daily_test"
-      
-      - name: Run Daily Tests
-        run: |
-          dbt test -m "fsc_evm,tag:daily_test"
+          make deploy_new_github_action DBT_TARGET=prod
