@@ -62,8 +62,6 @@ The following variables can be used to control various aspects of the dbt run. U
 | `UPDATE_SNOWFLAKE_TAGS` | Control updating of Snowflake tags. By default, this is set to False | `--vars '{"UPDATE_SNOWFLAKE_TAGS":false}'` |
 | `START_GHA_TASKS` | Start GitHub Actions tasks. By default, this is set to False | `--vars '{"START_GHA_TASKS":true}'` |
 
-
-
 #### Example Commands
 
 1. Update UDFs and SPs:
