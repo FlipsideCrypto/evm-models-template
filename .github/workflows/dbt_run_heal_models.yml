@@ -39,6 +39,7 @@ jobs:
         run: |
           pip install -r requirements.txt
           dbt deps
-      - name: Run DBT Jobs
+
+      - name: Run Heal Models
         run: |
-          dbt run -m "base_models,tag:heal" --vars '{"HEAL_MODEL":True}'
+          dbt run -m "<evm_chain>_models,tag:heal" --vars '{"HEAL_MODEL":True}'
