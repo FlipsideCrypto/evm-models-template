@@ -1,11 +1,11 @@
-name: dbt_test_intraday
-run-name: dbt_test_intraday
+name: dbt_run_scheduled_abis
+run-name: dbt_run_scheduled_abis
 
 on:
   workflow_dispatch:
     branches:
       - "main"
-    
+
 env:
   DBT_PROFILES_DIR: ./
 
@@ -40,10 +40,6 @@ jobs:
           pip install -r requirements.txt
           dbt deps
       
-      - name: Build Recent Testing Views
+      - name: Run ABI Models
         run: |
-          dbt run -m "fsc_evm,tag:recent_test"
-
-      - name: Run Recent Tests
-        run: |
-          dbt test -m "fsc_evm,tag:recent_test"
+          dbt run -m "fsc_evm,tag:silver_abis" "fsc_evm,tag:gold_abis"
