@@ -16,7 +16,7 @@ There is more information on how to use dbt docs in the last section of this doc
 
 **Click on the links below to jump to the documentation for each schema.**
 
-### <evm_chain> Tables (<evm_chain>.core)
+### Core Tables (<evm_chain>.core)
 
 **Dimension Tables:**
 - [dim_labels](https://flipsidecrypto.github.io/<evm_chain>-models/#!/model/model.fsc_evm.core__dim_labels)
@@ -26,6 +26,12 @@ There is more information on how to use dbt docs in the last section of this doc
 - [fact_event_logs](https://flipsidecrypto.github.io/<evm_chain>-models/#!/model/model.fsc_evm.core__fact_event_logs)
 - [fact_transactions](https://flipsidecrypto.github.io/<evm_chain>-models/#!/model/model.fsc_evm.core__fact_transactions)
 - [fact_traces](https://flipsidecrypto.github.io/<evm_chain>-models/#!/model/model.fsc_evm.core__fact_traces)
+
+### Price Tables (<evm_chain>.price)
+- [dim_asset_metadata](https://flipsidecrypto.github.io/<evm_chain>-models/#!/model/model.fsc_evm.price__dim_asset_metadata)
+- [fact_prices_ohlc_hourly](https://flipsidecrypto.github.io/<evm_chain>-models/#!/model/model.fsc_evm.price__fact_prices_ohlc_hourly)
+- [ez_asset_metadata](https://flipsidecrypto.github.io/<evm_chain>-models/#!/model/model.fsc_evm.price__ez_asset_metadata)
+- [ez_prices_hourly](https://flipsidecrypto.github.io/<evm_chain>-models/#!/model/model.fsc_evm.price__ez_prices_hourly)
 
 ## **Helpful User-Defined Functions (UDFs)**
 
