@@ -115,29 +115,7 @@ vars:
 #### STREAMLINE 2.0 END ####
 
 #### FSC_EVM BEGIN ####
-# Visit https://github.com/FlipsideCrypto/fsc-evm/wiki for more information on required and optional variables
 
-  ### GLOBAL VARIABLES BEGIN ###
-  ## REQUIRED
-  GLOBAL_PROD_DB_NAME: '<evm_chain>' # replace with the name of the chain
-  GLOBAL_NODE_SECRET_PATH: 'Vault/prod/<evm_chain>/<node_provider>/<network>'
-  GLOBAL_BLOCKS_PER_HOUR: 0 # replace with the blocks per hour of the chain
-
-  ### GLOBAL VARIABLES END ###
-
-  ### MAIN_PACKAGE VARIABLES BEGIN ###
-
-  ### CORE ###
-  ## REQUIRED
-  TRACES_FULL_RELOAD_START_BLOCK: # replace with the start block
-
-  ### PRICES ###
-  ## REQUIRED
-  PRICES_NATIVE_SYMBOLS: '<NATIVE_SYMBOL>' # replace with the native symbol(s) of the chain
-  PRICES_PROVIDER_PLATFORMS: ['<evm_chain>'] # replace with the platform name(s)of the chain
-  
-  ### LABELS ###
-
-  ### MAIN_PACKAGE VARIABLES END ###
+# Please visit https://github.com/FlipsideCrypto/fsc-evm/wiki for more information on required and optional variables
 
 #### FSC_EVM END ####
