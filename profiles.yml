@@ -1,4 +1,4 @@
-core:
+<evm_chain>:
   target: prod
   outputs:
     dev:
