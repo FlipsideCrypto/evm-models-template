@@ -3,8 +3,16 @@ run-name: ${{ github.event.inputs.branch }}
 
 on:
   workflow_dispatch:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
 
 concurrency: ${{ github.workflow }}
+
+env:
+  WAREHOUSE: "${{ vars.WAREHOUSE }}"
 
 jobs:
   called_workflow_template:
@@ -12,6 +20,6 @@ jobs:
     with:
       command: >
         dbt test --selector 'integration_tests'
-      environment:  ${{ github.ref == 'refs/heads/main' && 'workflow_prod' || 'workflow_dev' }}
+      environment:  ${{ inputs.environment }}
       warehouse: ${{ vars.WAREHOUSE }}
     secrets: inherit
