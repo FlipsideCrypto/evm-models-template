@@ -36,11 +36,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - name: Extract project name
+      - name: Extract project and profile names
         id: project-name
         run: |
-          PROJECT_NAME=$(grep "^profile:" dbt_project.yml | sed 's/^profile:[[:space:]]*"//' | sed 's/".*$//')
+          PROFILE_NAME=$(grep "^profile:" dbt_project.yml | sed 's/^profile:[[:space:]]*"//' | sed 's/".*$//')
+          PROJECT_NAME=$(grep "^name:" dbt_project.yml | sed 's/^name:[[:space:]]*"//' | sed 's/".*$//')
+          echo "PROFILE_NAME=$PROFILE_NAME" >> $GITHUB_ENV
           echo "PROJECT_NAME=$PROJECT_NAME" >> $GITHUB_ENV
+          echo "PROFILE_NAME: $PROFILE_NAME"
           echo "PROJECT_NAME: $PROJECT_NAME"
       
       - name: Set environment variables
