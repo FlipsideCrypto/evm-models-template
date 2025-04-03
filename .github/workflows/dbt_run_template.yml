@@ -52,16 +52,15 @@ jobs:
           echo "WAREHOUSE=${{ inputs.warehouse }}" >> $GITHUB_ENV
           echo "REGION=us-east-1" >> $GITHUB_ENV
           echo "SCHEMA=ADMIN" >> $GITHUB_ENV
+          echo "USER=DBT_CLOUD_$PROFILE_NAME" >> $GITHUB_ENV  
           echo "PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
           
           if [[ "${{ inputs.environment }}" == *"prod"* ]]; then
             echo "DATABASE=$PROFILE_NAME" >> $GITHUB_ENV
             echo "ROLE=DBT_CLOUD_$PROFILE_NAME" >> $GITHUB_ENV
-            echo "USER=DBT_CLOUD_$PROFILE_NAME" >> $GITHUB_ENV  
           else
             echo "DATABASE=${PROFILE_NAME}_DEV" >> $GITHUB_ENV
             echo "ROLE=INTERNAL_DEV" >> $GITHUB_ENV
-            echo "USER=INTERNAL_DEV" >> $GITHUB_ENV
           fi
           
       - uses: actions/setup-python@v4
