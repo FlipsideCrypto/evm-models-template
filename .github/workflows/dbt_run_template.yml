@@ -59,7 +59,7 @@ jobs:
             echo "ROLE=DBT_CLOUD_$PROFILE_NAME" >> $GITHUB_ENV
             echo "USER=DBT_CLOUD_$PROFILE_NAME" >> $GITHUB_ENV  
           else
-            echo "DATABASE=$PROFILE_NAME_DEV" >> $GITHUB_ENV
+            echo "DATABASE=${PROFILE_NAME}_DEV" >> $GITHUB_ENV
             echo "ROLE=INTERNAL_DEV" >> $GITHUB_ENV
             echo "USER=INTERNAL_DEV" >> $GITHUB_ENV
           fi
