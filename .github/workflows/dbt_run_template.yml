@@ -14,14 +14,14 @@ on:
       command_name:
           required: true
           type: string
-          default: Run DBT Jobs 1
+          default: Run DBT Command
       command:
           required: true
           type: string
       command_name_2:
           required: false
           type: string
-          default: Run DBT Jobs 2
+          default: Run DBT Command 2 (if enabled)
       command_2:
           required: false
           type: string
@@ -36,7 +36,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - name: Extract project and profile names
+      - name: Extract project & profile names from dbt_project.yml
         id: project-name
         run: |
           PROFILE_NAME=$(grep "^profile:" dbt_project.yml | sed 's/^profile:[[:space:]]*"//' | sed 's/".*$//')
@@ -62,7 +62,7 @@ jobs:
           python-version: "3.10"
           cache: "pip"
 
-      - name: install dependencies
+      - name: Install dependencies
         run: |
           pip install -r requirements.txt
           dbt deps
