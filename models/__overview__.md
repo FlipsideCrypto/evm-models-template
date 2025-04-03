@@ -1,6 +1,6 @@
 {% docs __overview__ %}
 
-# Welcome to the Flipside Crypto Core Models Documentation!
+# Welcome to the Flipside Crypto <evm_chain> Models Documentation!
 
 ## **What does this documentation cover?**
 The documentation included here details the design of the Core tables and views available via [Flipside Crypto.](https://flipsidecrypto.xyz/) For more information on how these models are built, please see [the github repository.](https://github.com/FlipsideCrypto/<evm_chain>-models)

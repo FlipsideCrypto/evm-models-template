@@ -41,4 +41,12 @@ else
 	dbt run-operation fsc_utils.create_gha_tasks --vars '{"START_GHA_TASKS":True}' -t $(DBT_TARGET)
 endif
 
-.PHONY: deploy_streamline_functions deploy_streamline_tables deploy_streamline_requests deploy_github_actions cleanup_time deploy_new_github_action
+release_main_package:
+	dbt run-operation fsc_evm.release_chain --args '{"schema_name": "core", "role_name": "internal_dev"}' -t $(DBT_TARGET)
+	dbt run-operation fsc_evm.release_chain --args '{"schema_name": "price", "role_name": "internal_dev"}' -t $(DBT_TARGET)
+	dbt run-operation fsc_evm.release_chain --args '{"schema_name": "nft", "role_name": "internal_dev"}' -t $(DBT_TARGET)
+	dbt run-operation fsc_evm.release_chain --args '{"schema_name": "core", "role_name": "velocity_ethereum"}' -t $(DBT_TARGET)
+	dbt run-operation fsc_evm.release_chain --args '{"schema_name": "price", "role_name": "velocity_ethereum"}' -t $(DBT_TARGET)
+	dbt run-operation fsc_evm.release_chain --args '{"schema_name": "nft", "role_name": "velocity_ethereum"}' -t $(DBT_TARGET)
+	
+.PHONY: deploy_streamline_functions deploy_streamline_tables deploy_streamline_requests deploy_github_actions cleanup_time deploy_new_github_action release_main_package
