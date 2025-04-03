@@ -26,10 +26,7 @@ on:
           required: false
           type: string
           default: ""
-
-concurrency:
-  group: ${{ github.workflow }}
-
+          
 jobs:
   run_dbt_jobs:
     runs-on: ubuntu-latest
