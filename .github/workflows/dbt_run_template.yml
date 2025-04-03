@@ -39,9 +39,9 @@ jobs:
       - name: Extract project name
         id: project-name
         run: |
-          PROJECT_NAME=$(grep "^name:" dbt_project.yml | awk -F"'" '{print $2}')
+          PROJECT_NAME=$(grep "^profile:" dbt_project.yml | sed 's/^profile:[[:space:]]*"//' | sed 's/".*$//')
           echo "PROJECT_NAME=$PROJECT_NAME" >> $GITHUB_ENV
-          echo "Extracted project name: $PROJECT_NAME"
+          echo "PROJECT_NAME: $PROJECT_NAME"
       
       - name: Set environment variables
         run: |
