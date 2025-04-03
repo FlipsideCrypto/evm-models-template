@@ -49,11 +49,11 @@ jobs:
       - name: Set environment variables
         run: |
           echo "ACCOUNT=vna27887.us-east-1" >> $GITHUB_ENV
-          echo "ROLE=DBT_CLOUD_$PROJECT_NAME" >> $GITHUB_ENV
-          echo "USER=DBT_CLOUD_$PROJECT_NAME" >> $GITHUB_ENV
+          echo "ROLE=DBT_CLOUD_$PROFILE_NAME" >> $GITHUB_ENV
+          echo "USER=DBT_CLOUD_$PROFILE_NAME" >> $GITHUB_ENV
           echo "PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
           echo "REGION=us-east-1" >> $GITHUB_ENV
-          echo "DATABASE=$PROJECT_NAME" >> $GITHUB_ENV
+          echo "DATABASE=$PROFILE_NAME" >> $GITHUB_ENV
           echo "WAREHOUSE=${{ inputs.warehouse }}" >> $GITHUB_ENV
           echo "SCHEMA=ADMIN" >> $GITHUB_ENV
 
