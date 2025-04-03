@@ -1,0 +1,77 @@
+name: dbt_run_template
+
+on:
+  workflow_call:
+    inputs:
+      warehouse:
+        required: false
+        type: string
+        default: DBT_CLOUD
+      environment:
+        required: false
+        type: string
+        default: workflow_prod
+      command_name:
+          required: true
+          type: string
+          default: Run DBT Jobs 1
+      command:
+          required: true
+          type: string
+      command_name_2:
+          required: false
+          type: string
+          default: Run DBT Jobs 2
+      command_2:
+          required: false
+          type: string
+          default: ""
+
+concurrency:
+  group: ${{ github.workflow }}
+
+jobs:
+  run_dbt_jobs:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environment }}
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Extract project name
+        id: project-name
+        run: |
+          PROJECT_NAME=$(grep "^name:" dbt_project.yml | awk -F"'" '{print $2}')
+          echo "PROJECT_NAME=$PROJECT_NAME" >> $GITHUB_ENV
+          echo "Extracted project name: $PROJECT_NAME"
+      
+      - name: Set environment variables
+        run: |
+          echo "ACCOUNT=vna27887.us-east-1" >> $GITHUB_ENV
+          echo "ROLE=DBT_CLOUD_$PROJECT_NAME" >> $GITHUB_ENV
+          echo "USER=DBT_CLOUD_$PROJECT_NAME" >> $GITHUB_ENV
+          echo "PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
+          echo "REGION=us-east-1" >> $GITHUB_ENV
+          echo "DATABASE=$PROJECT_NAME" >> $GITHUB_ENV
+          echo "WAREHOUSE=${{ inputs.warehouse }}" >> $GITHUB_ENV
+          echo "SCHEMA=ADMIN" >> $GITHUB_ENV
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+          cache: "pip"
+
+      - name: install dependencies
+        run: |
+          pip install -r requirements.txt
+          dbt deps
+      
+      - name: ${{inputs.command_name}}
+        run: |
+          ${{ inputs.command }}
+
+      - name: ${{inputs.command_name_2}}
+        if: "${{ inputs.command_2 != '' }}"
+        run: |
+          ${{ inputs.command_2 }}
