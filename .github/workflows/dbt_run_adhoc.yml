@@ -33,7 +33,7 @@ concurrency:
 
 jobs:
   called_workflow_template:
-    uses: FlipsideCrypto/evm-models-template/.github/workflows/dbt_run_template.yml@main
+    uses: FlipsideCrypto/fsc-evm/.github/workflows/dbt_run_template.yml@AN-5800/env-vars
     with:
       warehouse: ${{ inputs.warehouse }}
       environment: workflow_${{ inputs.environment }}
