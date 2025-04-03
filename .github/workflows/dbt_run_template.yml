@@ -14,14 +14,14 @@ on:
       command_name:
           required: true
           type: string
-          default: Run DBT Jobs 1
+          default: Run DBT Command
       command:
           required: true
           type: string
       command_name_2:
           required: false
           type: string
-          default: Run DBT Jobs 2
+          default: Run DBT Command 2 (if enabled)
       command_2:
           required: false
           type: string
@@ -36,7 +36,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - name: Extract project and profile names
+      - name: Extract project & profile names from dbt_project.yml
         id: project-name
         run: |
           PROFILE_NAME=$(grep "^profile:" dbt_project.yml | sed 's/^profile:[[:space:]]*"//' | sed 's/".*$//')
@@ -49,20 +49,27 @@ jobs:
       - name: Set environment variables
         run: |
           echo "ACCOUNT=vna27887.us-east-1" >> $GITHUB_ENV
-          echo "ROLE=DBT_CLOUD_$PROFILE_NAME" >> $GITHUB_ENV
-          echo "USER=DBT_CLOUD_$PROFILE_NAME" >> $GITHUB_ENV
-          echo "PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
-          echo "REGION=us-east-1" >> $GITHUB_ENV
-          echo "DATABASE=$PROFILE_NAME" >> $GITHUB_ENV
           echo "WAREHOUSE=${{ inputs.warehouse }}" >> $GITHUB_ENV
+          echo "REGION=us-east-1" >> $GITHUB_ENV
           echo "SCHEMA=ADMIN" >> $GITHUB_ENV
-
+          echo "PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
+          
+          if [[ "${{ inputs.environment }}" == *"prod"* ]]; then
+            echo "DATABASE=$PROFILE_NAME" >> $GITHUB_ENV
+            echo "ROLE=DBT_CLOUD_$PROFILE_NAME" >> $GITHUB_ENV
+            echo "USER=DBT_CLOUD_$PROFILE_NAME" >> $GITHUB_ENV  
+          else
+            echo "DATABASE=$PROFILE_NAME_DEV" >> $GITHUB_ENV
+            echo "ROLE=INTERNAL_DEV" >> $GITHUB_ENV
+            echo "USER=INTERNAL_DEV" >> $GITHUB_ENV
+          fi
+          
       - uses: actions/setup-python@v4
         with:
           python-version: "3.10"
           cache: "pip"
 
-      - name: install dependencies
+      - name: Install dependencies
         run: |
           pip install -r requirements.txt
           dbt deps
