@@ -1,5 +1,6 @@
-name: dbt_run_scheduled_curated
-run-name: dbt_run_scheduled_curated
+
+name: dbt_run_scheduled_scores
+run-name: dbt_run_scheduled_scores
 
 on:
   workflow_dispatch:
@@ -13,7 +14,7 @@ jobs:
   called_workflow_template:
     uses: FlipsideCrypto/fsc-evm/.github/workflows/dbt_run_template.yml@AN-5800/env-vars
     with:
-      command_name: Run Curated Models
+      command_name: Run Scores Models
       command: |
-        dbt run -m "$PROJECT_NAME,tag:curated" "fsc_evm,tag:curated"
+        dbt run -m "fsc_evm,tag:scores"
     secrets: inherit
