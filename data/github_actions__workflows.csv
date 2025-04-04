@@ -1,3 +1,14 @@
 workflow_name,workflow_schedule
-dbt_run_streamline_chainhead,"<insert-cron-schedule>"
-dbt_run_scheduled_main,"<insert-cron-schedule>"
+dbt_run_streamline_chainhead,"<insert-cron-schedule>" --2x/hour 30 min offset
+dbt_run_streamline_decoder_history,"<insert-cron-schedule>" --1x/week not overlapping with chainhead
+dbt_run_scheduled_main,"<insert-cron-schedule>" --1x/hour 15 min offset to latest chainhead run
+dbt_run_scheduled_decoder,"<insert-cron-schedule>" --1x/hour 15 min offset to latest main run
+dbt_run_scheduled_curated,"<insert-cron-schedule>" --every 4 hours 15 min offset to latest main run
+dbt_run_scheduled_abis,"<insert-cron-schedule>" --1x/day 5 min offset to earliest main run
+dbt_run_scheduled_scores,"<insert-cron-schedule>" --1x/day 20 min offset to earliest main run
+dbt_test_daily,"<insert-cron-schedule>" --1x/day 20 min offset to earliest main run not overlapping with main curated decoder scores or other test jobs
+dbt_test_intraday,"<insert-cron-schedule>" --4x/hour 20 min offset to latest main run not overlapping with main curated decoder scores or other test jobs
+dbt_test_monthly,"<insert-cron-schedule>" --1x/month 20 min offset to earliest main run not overlapping with main curated decoder scores or other test jobs
+dbt_run_heal_models,"<insert-cron-schedule>" --1x/week 30 min offset to curated
+dbt_run_full_observability,"<insert-cron-schedule>" --1x/month 15 min offset to earliest main run
+dbt_run_dev_refresh,"<insert-cron-schedule>" --1x/week on monday early UTC time 20 min offset to latest main run

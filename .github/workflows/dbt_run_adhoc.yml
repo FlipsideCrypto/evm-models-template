@@ -6,7 +6,7 @@ on:
     branches:
       - "main"
     inputs:
-      environment:
+      target:
         type: choice 
         description: DBT Run Environment
         required: true
@@ -36,7 +36,7 @@ jobs:
     uses: FlipsideCrypto/fsc-evm/.github/workflows/dbt_run_template.yml@AN-5800/env-vars
     with:
       warehouse: ${{ inputs.warehouse }}
-      environment: workflow_${{ inputs.environment }}
+      target: ${{ inputs.target }}
       command_name: Run DBT Command
       command: ${{ inputs.dbt_command }}
     secrets: inherit

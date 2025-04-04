@@ -13,6 +13,7 @@ jobs:
   called_workflow_template:
     uses: FlipsideCrypto/fsc-evm/.github/workflows/dbt_run_template.yml@AN-5800/env-vars
     with:
+      target: test
       command_name: Build Recent Testing Views
       command: |
         dbt run -m "fsc_evm,tag:recent_test"
