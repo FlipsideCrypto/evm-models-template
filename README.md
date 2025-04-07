@@ -5,7 +5,6 @@
 4. Set up the rest of the dbt project, where applicable, including but not limited to:
     - `dbt_project.yml` (enable/disable packages, vars, etc.)
     - `.github/workflows` (update tags, etc.)
-    - `github_actions__workflows.csv` (update schedule, workflows, etc.)
     - `overview.md` (update `<evm_chain>`, table references, docs etc.)
     - `sources.yml` (update schemas, tables etc.)
     - `requirements.txt` (update dependencies)

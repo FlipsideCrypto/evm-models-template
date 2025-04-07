@@ -6,7 +6,7 @@ on:
     branches:
       - "main"
     inputs:
-      environment:
+      target:
         type: choice 
         description: DBT Run Environment
         required: true
@@ -33,10 +33,10 @@ concurrency:
 
 jobs:
   called_workflow_template:
-    uses: FlipsideCrypto/evm-models-template/.github/workflows/dbt_run_template.yml@main
+    uses: FlipsideCrypto/fsc-evm/.github/workflows/dbt_run_template.yml@pre-release/v4-beta
     with:
       warehouse: ${{ inputs.warehouse }}
-      environment: workflow_${{ inputs.environment }}
+      target: ${{ inputs.target }}
       command_name: Run DBT Command
       command: ${{ inputs.dbt_command }}
     secrets: inherit
