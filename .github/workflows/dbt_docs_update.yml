@@ -10,5 +10,5 @@ concurrency:
 
 jobs:
   called_workflow_template:
-    uses: FlipsideCrypto/fsc-evm/.github/workflows/dbt_run_template_docs_update.yml@AN-5800/env-vars
+    uses: FlipsideCrypto/fsc-evm/.github/workflows/dbt_run_template_docs_update.yml@pre-release/v4-beta
     secrets: inherit
