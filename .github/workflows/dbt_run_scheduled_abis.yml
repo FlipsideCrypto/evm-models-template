@@ -15,5 +15,5 @@ jobs:
     with:
       command_name: Run ABI Models
       command: |
-        dbt run -m "fsc_evm,tag:silver_abis" "fsc_evm,tag:gold_abis"
+        dbt run -m "fsc_evm,tag:silver,tag:abis" "fsc_evm,tag:gold,tag:abis"
     secrets: inherit
