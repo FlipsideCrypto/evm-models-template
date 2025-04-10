@@ -83,9 +83,9 @@ The following variables can be used to control various aspects of the dbt run. U
    dbt run --vars '{"UPDATE_SNOWFLAKE_TAGS":true}' -s models/silver/utilities/silver__number_sequence.sql
    ```
 
-5. Start GHA tasks:
+5. Start all GHA tasks:
    ```
-   dbt seed -s github_actions__workflows && dbt run -m models/github_actions --full-refresh && dbt run-operation fsc_utils.create_gha_tasks --vars '{"START_GHA_TASKS":True}'
+   dbt seed -s github_actions__workflows && dbt run -m models/github_actions --full-refresh && dbt run-operation fsc_evm.create_gha_tasks --vars '{"START_GHA_TASKS":True}'
    ```
 
 6. Using two or more variables:
