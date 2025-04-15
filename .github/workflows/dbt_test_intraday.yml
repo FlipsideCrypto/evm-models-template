@@ -17,7 +17,8 @@ jobs:
       command_name: Build Recent Testing Views
       command: |
         dbt run -m "fsc_evm,tag:recent_test"
-      command_name_2: Run Recent Tests
+      command_name_2: Run Observability & Recent Tests
       command_2: |
+        dbt run -m "fsc_evm,tag:observability"
         dbt test -m "fsc_evm,tag:recent_test"
     secrets: inherit

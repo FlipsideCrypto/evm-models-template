@@ -17,7 +17,7 @@ jobs:
       command_name: Build Daily Testing Views
       command: |
         dbt run -m "fsc_evm,tag:daily_test"
-      command_name_2: Run Daily Tests
+      command_name_2: Run Daily Tests (all tests excluding full, recent and misc. others)
       command_2: |
-        dbt test -m "fsc_evm,tag:daily_test"
+        dbt test --exclude "fsc_evm,tag:full_test" "fsc_evm,tag:recent_test" "fsc_evm,tag:gha_tasks" livequery_models
     secrets: inherit
