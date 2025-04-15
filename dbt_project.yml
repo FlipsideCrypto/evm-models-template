@@ -116,15 +116,15 @@ vars:
   config:
   # The keys correspond to dbt profiles and are case sensitive
     dev:
-      API_INTEGRATION: 
-      EXTERNAL_FUNCTION_URI: 
+      API_INTEGRATION: AWS_<EVM_CHAIN>_API_STG_V2
+      EXTERNAL_FUNCTION_URI: <insert_uri>.execute-api.us-east-1.amazonaws.com/stg/
       ROLES:
         - AWS_LAMBDA_<EVM_CHAIN>_API # replace with the name of the chain
         - INTERNAL_DEV
 
     prod:
-      API_INTEGRATION: 
-      EXTERNAL_FUNCTION_URI: 
+      API_INTEGRATION: AWS_<EVM_CHAIN>_API_PROD_V2
+      EXTERNAL_FUNCTION_URI: <insert_uri>.execute-api.us-east-1.amazonaws.com/prod/
       ROLES:
         - AWS_LAMBDA_<EVM_CHAIN>_API # replace with the name of the chain
         - INTERNAL_DEV
