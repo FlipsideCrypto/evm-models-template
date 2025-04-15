@@ -70,16 +70,32 @@ models:
     +on_schema_change: "append_new_columns"
     main_package:
       +enabled: false # disable main_package by default, enabled other packages as needed
+      admin:
+        +enabled: true
       core:
         +enabled: true # enable subpackages, as needed
       github_actions:
         +enabled: true
       labels:
         +enabled: true
+      observability:
+        +enabled: true
       prices:
         +enabled: true
       utils:
         +enabled: true
+    decoder_package:
+      +enabled: false
+      abis:
+        +enabled: true
+      decoded_logs:
+        +enabled: true
+    curated_package:
+      +enabled: false
+      stats:
+        +enabled: true
+    scores_package:
+      +enabled: true
 
 vars:
   "dbt_date:time_zone": GMT
