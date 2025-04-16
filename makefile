@@ -38,11 +38,11 @@ deploy_chain_phase_1:
 		if [ "$$receipts_by_hash" = "n" ]; then \
 			dbt run -m "fsc_evm,tag:phase_1" --exclude "fsc_evm,tag:receipts" --full-refresh --vars '{"MAIN_SL_NEW_BUILD_ENABLED": true, "GLOBAL_STREAMLINE_FR_ENABLED": true}' -t $(DBT_TARGET); \
 			dbt test -m "fsc_evm,tag:chainhead"; \
-			dbt run -m "fsc_evm,tag:streamline,tag:core,tag:complete" "fsc_evm,tag:streamline,tag:core,tag:realtime" "fsc_evm,tag:confirm_blocks" --exclude "fsc_evm,tag:receipts" --vars '{"MAIN_SL_NEW_BUILD_ENABLED": true, "STREAMLINE_INVOKE_STREAMS":True}' -t $(DBT_TARGET); \
+			dbt run -m "fsc_evm,tag:streamline,tag:core,tag:complete" "fsc_evm,tag:streamline,tag:core,tag:realtime" --exclude "fsc_evm,tag:receipts" "fsc_evm,tag:confirm_blocks" --vars '{"MAIN_SL_NEW_BUILD_ENABLED": true, "STREAMLINE_INVOKE_STREAMS":True}' -t $(DBT_TARGET); \
 		else \
 			dbt run -m "fsc_evm,tag:phase_1" --exclude "fsc_evm,tag:receipts_by_hash" --full-refresh --vars '{"MAIN_SL_NEW_BUILD_ENABLED": true, "GLOBAL_STREAMLINE_FR_ENABLED": true}' -t $(DBT_TARGET); \
 			dbt test -m "fsc_evm,tag:chainhead"; \
-			dbt run -m "fsc_evm,tag:streamline,tag:core,tag:complete" "fsc_evm,tag:streamline,tag:core,tag:realtime" "fsc_evm,tag:confirm_blocks" --exclude "fsc_evm,tag:receipts_by_hash" --vars '{"MAIN_SL_NEW_BUILD_ENABLED": true, "STREAMLINE_INVOKE_STREAMS":True}' -t $(DBT_TARGET); \
+			dbt run -m "fsc_evm,tag:streamline,tag:core,tag:complete" "fsc_evm,tag:streamline,tag:core,tag:realtime" --exclude "fsc_evm,tag:receipts_by_hash" "fsc_evm,tag:confirm_blocks" --vars '{"MAIN_SL_NEW_BUILD_ENABLED": true, "STREAMLINE_INVOKE_STREAMS":True}' -t $(DBT_TARGET); \
 		fi; \
 	fi; \
 	echo "# wait ~10 minutes"; \
@@ -50,23 +50,27 @@ deploy_chain_phase_1:
 
 deploy_chain_phase_2:
 	@if [ "$(DBT_TARGET)" != "prod" ]; then \
-		dbt run -m "fsc_evm,tag:phase_2" --full-refresh --vars '{"STREAMLINE_USE_DEV_FOR_EXTERNAL_TABLES":true, "GLOBAL_STREAMLINE_FR_ENABLED": true, "GLOBAL_BRONZE_FR_ENABLED": true, "GLOBAL_SILVER_FR_ENABLED": true, "GLOBAL_GOLD_FR_ENABLED": true}' -t $(DBT_TARGET); \
-		dbt run -m "fsc_evm,tag:streamline,tag:decoded_logs,tag:realtime" "fsc_evm,tag:streamline,tag:decoded_logs,tag:complete" "fsc_evm,tag:streamline,tag:abis,tag:realtime" "fsc_evm,tag:streamline,tag:abis,tag:complete" --vars '{"STREAMLINE_INVOKE_STREAMS":True, "DECODER_SL_TESTING_LIMIT": 500}' -t $(DBT_TARGET); \
+		dbt run -m "fsc_evm,tag:phase_2" --full-refresh --vars '{"STREAMLINE_USE_DEV_FOR_EXTERNAL_TABLES":true, "GLOBAL_STREAMLINE_FR_ENABLED": true, "GLOBAL_BRONZE_FR_ENABLED": true, "GLOBAL_SILVER_FR_ENABLED": true, "GLOBAL_GOLD_FR_ENABLED": true, "GLOBAL_NEW_BUILD_ENABLED": true}' -t $(DBT_TARGET); \
+		dbt run -m "fsc_evm,tag:streamline,tag:abis,tag:realtime" "fsc_evm,tag:streamline,tag:abis,tag:complete" --vars '{"STREAMLINE_INVOKE_STREAMS":True, "DECODER_SL_NEW_BUILD_ENABLED": true}' -t $(DBT_TARGET); \
 	else \
-		dbt run -m "fsc_evm,tag:phase_2" --full-refresh --vars '{"GLOBAL_STREAMLINE_FR_ENABLED": true, "GLOBAL_BRONZE_FR_ENABLED": true, "GLOBAL_SILVER_FR_ENABLED": true, "GLOBAL_GOLD_FR_ENABLED": true}' -t $(DBT_TARGET); \
-		dbt run -m "fsc_evm,tag:streamline,tag:decoded_logs,tag:realtime" "fsc_evm,tag:streamline,tag:decoded_logs,tag:complete" "fsc_evm,tag:streamline,tag:abis,tag:realtime" "fsc_evm,tag:streamline,tag:abis,tag:complete" --vars '{"STREAMLINE_INVOKE_STREAMS":True}' -t $(DBT_TARGET); \
+		dbt run -m "fsc_evm,tag:phase_2" --full-refresh --vars '{"GLOBAL_STREAMLINE_FR_ENABLED": true, "GLOBAL_BRONZE_FR_ENABLED": true, "GLOBAL_SILVER_FR_ENABLED": true, "GLOBAL_GOLD_FR_ENABLED": true, "GLOBAL_NEW_BUILD_ENABLED": true}' -t $(DBT_TARGET); \
+		dbt run -m "fsc_evm,tag:streamline,tag:abis,tag:realtime" "fsc_evm,tag:streamline,tag:abis,tag:complete" --vars '{"STREAMLINE_INVOKE_STREAMS":True, "DECODER_SL_NEW_BUILD_ENABLED": true}' -t $(DBT_TARGET); \
+		make deploy_github_actions DBT_TARGET=$(DBT_TARGET); \
 	fi; \
-	make deploy_github_actions DBT_TARGET=$(DBT_TARGET); \
 	echo "# tasks set to SUSPEND by default"; \
 	echo "# kick dbt_alter_gha_task or dbt_alter_all_gha_tasks workflow to RESUME tasks, where applicable"; \
+	echo "# wait ~10 minutes"; \
 	echo "# run deploy_chain_phase_3"
 
 deploy_chain_phase_3:
+	dbt run -m "fsc_evm,tag:phase_2" -t $(DBT_TARGET); \
 	@if [ "$(DBT_TARGET)" != "prod" ]; then \
-		dbt run -m "fsc_evm,tag:phase_3" --full-refresh --vars '{"STREAMLINE_USE_DEV_FOR_EXTERNAL_TABLES":true, "GLOBAL_BRONZE_FR_ENABLED": true, "GLOBAL_SILVER_FR_ENABLED": true, "GLOBAL_GOLD_FR_ENABLED": true}' -t $(DBT_TARGET); \
+		dbt run -m "fsc_evm,tag:phase_3" --full-refresh --vars '{"STREAMLINE_USE_DEV_FOR_EXTERNAL_TABLES":true, "GLOBAL_BRONZE_FR_ENABLED": true, "GLOBAL_SILVER_FR_ENABLED": true, "GLOBAL_GOLD_FR_ENABLED": true, "GLOBAL_NEW_BUILD_ENABLED": true}' -t $(DBT_TARGET); \
+		dbt run -m "fsc_evm,tag:silver,tag:abis" "fsc_evm,tag:streamline,tag:decoded_logs,tag:realtime" "fsc_evm,tag:streamline,tag:decoded_logs,tag:complete" --vars '{"STREAMLINE_INVOKE_STREAMS":True, "DECODER_SL_TESTING_LIMIT": 500}' -t $(DBT_TARGET); \
 	else \
-		dbt run -m "fsc_evm,tag:phase_3" --full-refresh --vars '{"GLOBAL_BRONZE_FR_ENABLED": true, "GLOBAL_SILVER_FR_ENABLED": true, "GLOBAL_GOLD_FR_ENABLED": true}' -t $(DBT_TARGET); \
-	fi
+		dbt run -m "fsc_evm,tag:phase_3" --full-refresh --vars '{"GLOBAL_BRONZE_FR_ENABLED": true, "GLOBAL_SILVER_FR_ENABLED": true, "GLOBAL_GOLD_FR_ENABLED": true, "GLOBAL_NEW_BUILD_ENABLED": true}' -t $(DBT_TARGET); \
+		dbt run -m "fsc_evm,tag:silver,tag:abis" "fsc_evm,tag:streamline,tag:decoded_logs,tag:realtime" "fsc_evm,tag:streamline,tag:decoded_logs,tag:complete" --vars '{"STREAMLINE_INVOKE_STREAMS":True}' -t $(DBT_TARGET); \
+	fi; \
 	echo "# tasks set to SUSPEND by default"; \
 	echo "# kick dbt_alter_gha_task or dbt_alter_all_gha_tasks workflow to RESUME tasks, where applicable"
 
