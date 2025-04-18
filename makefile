@@ -4,18 +4,18 @@ cleanup_time:
 	rm -f package-lock.yml && dbt clean && dbt deps
 
 deploy_github_actions:
-	dbt run -s livequery_base.deploy.marketplace.github --vars '{"UPDATE_UDFS_AND_SPS":True}' -t $(DBT_TARGET)
-	dbt run -m "fsc_evm,tag:gha_tasks" --full-refresh -t $(DBT_TARGET)
+	dbt run -s livequery_base.deploy.marketplace.github --vars '{"UPDATE_UDFS_AND_SPS":True}' -t $(DBT_TARGET); \
+	dbt run -m "fsc_evm,tag:gha_tasks" --full-refresh -t $(DBT_TARGET); \
 	dbt run-operation fsc_evm.create_gha_tasks --vars '{"START_GHA_TASKS":False}' -t $(DBT_TARGET)
 
 deploy_new_github_action:
-	dbt run-operation fsc_evm.drop_github_actions_schema -t $(DBT_TARGET)
-	dbt run -m "fsc_evm,tag:gha_tasks" --full-refresh -t $(DBT_TARGET)
+	dbt run-operation fsc_evm.drop_github_actions_schema -t $(DBT_TARGET); \
+	dbt run -m "fsc_evm,tag:gha_tasks" --full-refresh -t $(DBT_TARGET); \
 	dbt run-operation fsc_evm.create_gha_tasks --vars '{"START_GHA_TASKS":False}' -t $(DBT_TARGET)
 
 deploy_livequery:
-	dbt run-operation fsc_evm.drop_livequery_schemas --vars '{"UPDATE_UDFS_AND_SPS": true}' -t $(DBT_TARGET)
-	dbt run -m livequery_base.deploy.core --vars '{"UPDATE_UDFS_AND_SPS": true}' -t $(DBT_TARGET)
+	dbt run-operation fsc_evm.drop_livequery_schemas --vars '{"UPDATE_UDFS_AND_SPS": true}' -t $(DBT_TARGET); \
+	dbt run -m livequery_base.deploy.core --vars '{"UPDATE_UDFS_AND_SPS": true}' -t $(DBT_TARGET); \
 	dbt run-operation fsc_evm.livequery_grants --vars '{"UPDATE_UDFS_AND_SPS": true}' -t $(DBT_TARGET)
 
 deploy_chain_phase_1:
@@ -63,8 +63,8 @@ deploy_chain_phase_2:
 	echo "# run deploy_chain_phase_3"
 
 deploy_chain_phase_3:
-	dbt run -m "fsc_evm,tag:phase_2" -t $(DBT_TARGET); \
-	@if [ "$(DBT_TARGET)" != "prod" ]; then \
+	@dbt run -m "fsc_evm,tag:phase_2" -t $(DBT_TARGET); \
+	if [ "$(DBT_TARGET)" != "prod" ]; then \
 		dbt run -m "fsc_evm,tag:phase_3" --full-refresh --vars '{"STREAMLINE_USE_DEV_FOR_EXTERNAL_TABLES":true, "GLOBAL_BRONZE_FR_ENABLED": true, "GLOBAL_SILVER_FR_ENABLED": true, "GLOBAL_GOLD_FR_ENABLED": true, "GLOBAL_NEW_BUILD_ENABLED": true}' -t $(DBT_TARGET); \
 		dbt run -m "fsc_evm,tag:silver,tag:abis" "fsc_evm,tag:streamline,tag:decoded_logs,tag:realtime" "fsc_evm,tag:streamline,tag:decoded_logs,tag:complete" --vars '{"STREAMLINE_INVOKE_STREAMS":True, "DECODER_SL_TESTING_LIMIT": 500}' -t $(DBT_TARGET); \
 	else \
