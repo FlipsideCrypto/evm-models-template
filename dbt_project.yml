@@ -59,7 +59,7 @@ models:
       relation: true
       columns: true
     +on_schema_change: "append_new_columns"
-  livequery_models:
+  livequery_base:
     +materialized: ephemeral
   fsc_evm:
     +enabled: false # disable fsc_evm package by default
@@ -70,16 +70,32 @@ models:
     +on_schema_change: "append_new_columns"
     main_package:
       +enabled: false # disable main_package by default, enabled other packages as needed
+      admin:
+        +enabled: true
       core:
         +enabled: true # enable subpackages, as needed
       github_actions:
         +enabled: true
       labels:
         +enabled: true
+      observability:
+        +enabled: true
       prices:
         +enabled: true
       utils:
         +enabled: true
+    decoder_package:
+      +enabled: false
+      abis:
+        +enabled: true
+      decoded_logs:
+        +enabled: true
+    curated_package:
+      +enabled: false
+      stats:
+        +enabled: true
+    scores_package:
+      +enabled: true
 
 vars:
   "dbt_date:time_zone": GMT
@@ -100,15 +116,15 @@ vars:
   config:
   # The keys correspond to dbt profiles and are case sensitive
     dev:
-      API_INTEGRATION: 
-      EXTERNAL_FUNCTION_URI: 
+      API_INTEGRATION: AWS_<EVM_CHAIN>_API_STG_V2
+      EXTERNAL_FUNCTION_URI: <insert_uri>.execute-api.us-east-1.amazonaws.com/stg/
       ROLES:
         - AWS_LAMBDA_<EVM_CHAIN>_API # replace with the name of the chain
         - INTERNAL_DEV
 
     prod:
-      API_INTEGRATION: 
-      EXTERNAL_FUNCTION_URI: 
+      API_INTEGRATION: AWS_<EVM_CHAIN>_API_PROD_V2
+      EXTERNAL_FUNCTION_URI: <insert_uri>.execute-api.us-east-1.amazonaws.com/prod/
       ROLES:
         - AWS_LAMBDA_<EVM_CHAIN>_API # replace with the name of the chain
         - INTERNAL_DEV
