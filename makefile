@@ -17,8 +17,7 @@ deploy_gha_workflows_table:
 		fi ; \
 	done ; \
 	echo "Found workflows: $$WORKFLOW_VALUES" ; \
-	dbt run-operation update_workflow_table --args "{\"workflow_values\": \"$$WORKFLOW_VALUES\"}" -t $(DBT_TARGET) ; \
-	echo "Table github_actions.workflows updated successfully."
+	dbt run-operation create_workflow_table --args "{\"workflow_values\": \"$$WORKFLOW_VALUES\"}" -t $(DBT_TARGET)
 
 deploy_gha_tasks:
 	@set -e; \
