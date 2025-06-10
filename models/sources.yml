@@ -14,6 +14,7 @@ sources:
       - name: confirm_blocks
       - name: decoded_logs
       - name: contract_abis
+      - name: token_reads
   - name: crosschain_silver
     database: >-
       {{ 'CROSSCHAIN_DEV' if '_DEV' in target.database.upper() else 'CROSSCHAIN' }}
@@ -54,9 +55,3 @@ sources:
     tables:
       - name: _master_keys
       - name: rpc_node_logs
-  - name: logs_temp
-    database: "{{ target.database }}"
-    schema: silver
-    tables:
-      - name: logs
-      - name: decoded_logs
