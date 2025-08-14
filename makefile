@@ -46,6 +46,7 @@ deploy_chain_phase_1:
 	dbt run-operation fsc_evm.livequery_grants --vars '{"UPDATE_UDFS_AND_SPS": true}' -t $(DBT_TARGET); \
 	dbt run-operation fsc_evm.create_evm_streamline_udfs --vars '{"UPDATE_UDFS_AND_SPS": true}' -t $(DBT_TARGET); \
 	dbt run-operation fsc_evm.call_sample_rpc_node -t $(DBT_TARGET); \
+	make deploy_gha_workflows_table DBT_TARGET=$(DBT_TARGET); \
 	if [ "$(DBT_TARGET)" != "prod" ]; then \
 		if [ "$(RECEIPTS_BY_HASH_ENABLED)" = "true" ]; then \
 			dbt run -m "fsc_evm,tag:phase_1" --exclude "fsc_evm,tag:receipts" --full-refresh --vars '{"STREAMLINE_USE_DEV_FOR_EXTERNAL_TABLES":true, "MAIN_SL_NEW_BUILD_ENABLED": true, "GLOBAL_STREAMLINE_FR_ENABLED": true}' -t $(DBT_TARGET); \
